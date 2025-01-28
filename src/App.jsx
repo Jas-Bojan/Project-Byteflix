@@ -1,19 +1,20 @@
 
 import './App.css'
 
-const Card = () => {
+const Card = ({title}) => {
   return (
-      <h1>This is a card</h1>
+      <div>
+          <h2>{title}</h2>
+      </div>
   )
 }
 
 const App = () => {
   return (
-    <div>
-      <Card/>
-      <Card/>
-      <Card/>
-
+    <div className={"card-container"}>
+      <Card title={"Star Wars"}/>
+      <Card title={"Lion King"}/>
+      <Card title={"Saw" }/>
     </div>
   )
 }
