@@ -1,21 +1,19 @@
 
 import './App.css'
 
-const Card = ({title}) => {
-  return (
-      <div>
-          <h2>{title}</h2>
-      </div>
-  )
-}
 
 const App = () => {
   return (
-    <div className={"card-container"}>
-      <Card title={"Star Wars"}/>
-      <Card title={"Lion King"}/>
-      <Card title={"Saw" }/>
-    </div>
+    <main>
+      <div calssName = "pattern"/>
+
+      <div className="wrapper">
+<h1>
+  
+</h1>
+      </div>
+
+    </main>
   )
 }
 export default App
