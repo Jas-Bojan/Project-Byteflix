@@ -11,6 +11,7 @@
               placeholder='Search through thousands of movies'
               value={searchTerm}
               onChange={(e)=>setSearchTerm(e.target.value)}
+             
             />
           </div>
         </div>

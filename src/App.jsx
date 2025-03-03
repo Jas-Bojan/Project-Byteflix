@@ -1,6 +1,7 @@
 
 import './App.css'
 import React, { useEffect,useState } from 'react'
+import { useDebounce } from 'react-use'
 import Search from './components/Search'
 import Spinner from './components/Spinner';
 import MovieCard from './components/MovieCard';
@@ -25,21 +26,27 @@ const App = () => {
   // states
 
   const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [movieList, setMovieList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  
+
+  //debounce search term to optimize API calls
+  // wait time 700ms
+  useDebounce(()=>setDebouncedSearchTerm(searchTerm),700,[searchTerm])
 
   // a function to fetch movies from the database
 
-  const fetchMovies = async () => {
+  const fetchMovies = async (query = '') => {
     setIsLoading(true);
     setErrorMessage(null);
 
     //try block to get the movies
 
     try {
-      const endpoint = `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`
+      const endpoint = query
+      ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
+      : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc` ;
       const response = await fetch(endpoint, API_OPTIONS);
       
       // Error if connection is invalid
@@ -71,8 +78,8 @@ const App = () => {
 
   // Call fetchMovies when the component is mounted.
   useEffect(() => {
-    fetchMovies();  
-    }, []);
+    fetchMovies(searchTerm);  
+    }, [debouncedSearchTerm]);
   
 
   return (
@@ -87,8 +94,11 @@ const App = () => {
           </h1>
         <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header>
+
+
         <section className='all-movies'>
-          <h2> All Movies</h2>
+
+          <h2 > All Movies</h2>
           
           {isLoading ?(
             <Spinner/>
