@@ -1,6 +1,10 @@
 # Byteflix
 ### using TMDB
 
+The Movie DataBase is an extensive database of movies and shows contributed to by the several thousands of users. 
+
+They provide an opensource free API that can be integrated with any application to make use of the massive library of data for FREE!
+
 ## Introduction
 
 This project was developed with React.js for the frontend, Appwrite for backend solution and styled with TailwindCSS.
@@ -12,6 +16,7 @@ Search for your favourite movie across almsot a million others and get lightning
 Brought to you by the TMDB movie database. 
 
 ⚠️ Requires VPN access if you're an Indian user. TMDB has been blocked by several ISPs in India, like JIO. 
+
 🎯 Byteflix V2, under development for easier access for Indian users. 
 
 ## ⚙️ Tech Stack
