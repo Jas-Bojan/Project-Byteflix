@@ -5,7 +5,7 @@ import { useDebounce } from 'react-use'
 import Search from './components/Search'
 import Spinner from './components/Spinner';
 import MovieCard from './components/MovieCard';
-import { updateSearchCount } from './appwrite';
+import { getTrendingMovies, updateSearchCount } from './appwrite';
 
 // perma variables
 
@@ -25,14 +25,15 @@ const API_OPTIONS = {
 const App = () => {
 
   // states
-
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [movieList, setMovieList] = useState([]);
-  const [trendingMovies, setTrendingMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
 
+  const [movieList, setMovieList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  
+  const [trendingMovies, setTrendingMovies] = useState([]);
+  
   //debounce search term to optimize API calls
   // wait time 700ms
   useDebounce(()=>setDebouncedSearchTerm(searchTerm),700,[searchTerm])
@@ -82,11 +83,30 @@ const App = () => {
     }
   }
 
+  // trending movies function
+
+  const loadTrendingMovies = async () => {
+    try {
+
+      const movies = await getTrendingMovies();
+
+      setTrendingMovies(movies);
+      
+    } catch (error) {
+      console.log(`Error fetching Trending ${error}`);
+      
+    }
+  }
+
   // Call fetchMovies when the component is mounted.
   useEffect(() => {
     fetchMovies(searchTerm);  
     }, [debouncedSearchTerm]);
-  
+
+  useEffect(() => {
+    loadTrendingMovies();
+  }, [])
+    
 
   return (
     <main>
@@ -101,6 +121,19 @@ const App = () => {
         <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header>
 
+        {trendingMovies.length>0 && (
+          <section className='trending'>
+            <h2> Trending Movies</h2>
+            <ul>
+              {trendingMovies.map((movie, index)=>(
+                <li key={movie.$id}>
+                  <p>{index+1}</p>
+                  <img src={movie.poster_url} alt={movie.title}/>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         <section className='all-movies'>
 
