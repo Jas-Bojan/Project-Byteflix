@@ -5,6 +5,7 @@ import { useDebounce } from 'react-use'
 import Search from './components/Search'
 import Spinner from './components/Spinner';
 import MovieCard from './components/MovieCard';
+import { updateSearchCount } from './appwrite';
 
 // perma variables
 
@@ -29,6 +30,7 @@ const App = () => {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [movieList, setMovieList] = useState([]);
+  const [trendingMovies, setTrendingMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   //debounce search term to optimize API calls
@@ -66,6 +68,10 @@ const App = () => {
       
       // Asign the results to state 
       setMovieList(data.results || []);
+      
+      if(query && data.results.length>0){
+        await updateSearchCount(query,data.results[0]);
+      }
 
     } catch (error) { //if try fails in any part, error displayed here.
       console.error(`Error fetching movies: ${error}`);
